@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+      - REDIS_DB=0
+      - RATE_LIMIT_IP_REQUESTS=5
+      - RATE_LIMIT_IP_WINDOW=1s
+      - RATE_LIMIT_IP_BLOCK_DURATION=5m
+      - RATE_LIMIT_TOKEN_REQUESTS=10
+      - RATE_LIMIT_TOKEN_WINDOW=1s
+      - RATE_LIMIT_TOKEN_BLOCK_DURATION=5m
+      - SERVER_PORT=8080
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data: 
